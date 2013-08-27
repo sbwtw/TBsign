@@ -16,7 +16,7 @@ class SignCron extends Cron{
 		$this->mysqli->fields('bars.id as id, user.cookie as cookie, bars.bar as bar');
 		$this->mysqli->where('user.id = bars.user and bars.exp in (0,-2) and bars.time = \'' . $this->toDay . '\'');
 		$this->mysqli->order('bar');
-		$this->mysqli->limit(10);
+		$this->mysqli->limit(30);
 		$this->barList = $this->mysqli->select();
 		if (!$this->barList){die('no more bar need sign');}
 	}

@@ -1,4 +1,69 @@
-百度贴吧自动签到系统 for bae
+百度贴吧自动签到系统 v:1.0
 
-搭建流程:
+文件功能
 
+ - index.php
+ 	主入口文件,用户从此页面登陆帐号,以百度帐号密码登陆.
+
+ - install.php
+ 	安装程序,主要为数据库设置,重复执行此文件会重置数据库.
+
+ - manage.php
+ 	用户查看签到日志的页面.
+
+		点击吧名可以跳转到对应吧.
+
+		各个节操值的意义:
+			* 正数: 签到成功,所得的经验. 注: 有时签到经验+6但是显示+5或者+4,这是百度的问题.
+			*  零 : 还未进行签到.
+			*  -1 : 无法签到. 注: 页面上找不到签到链接.
+			*  -2 : 签到失败. 注: 执行签到操作但未返回经验+n信息. 如返回 "现在签到人太多,请过一会儿签到."
+			*  -3 : 签到错误. 注: 比如beo吧,签到总是错误.原因可能是此吧不能签到但又有签到链接.百度的问题.
+			*  -4 : 补签失败. 注: 签到失败后会有一次补签,再失败会置为-4.
+
+ - dataBaseConfig.include.php
+ 	配置文件,[唯一一个]需要用户修改的文件.
+		
+		如果搭建在BAE上,那么只需修改dbName项.具体见下面的搭建流程.
+
+ - sign.cron.php 和 getBars.cron.php
+ 	cron任务的执行文件,功能分别为签到和获取贴吧列表.设定cron任务方法见搭建流程.
+
+ - cron.class.php / CURL.class.php / dataBase.class.php / getCookie.action.php / getCookieConfig.include.php
+ 	分别为cron基类,CURL类,db类,获取cookie动作,获取cookie动作的配置文件.
+
+
+
+搭建流程之超级无级详细版(for BAE): 注: 所有没有提到的选项表示按默认选择或者随便选择.
+	
+	1. 点击BAE(developer.baidu.com)中的快速创建应用.
+
+	2. 接入方式选第二个(PC Iframe应用),确定.
+
+	3. 点击左侧的云环境(BAE),填写应用域名(下面以__DOMAIN__代表此值),确定.
+
+	4. 在左侧的云环境-服务管理-MySQL(云数据库)中,创建数据库.确定.记录数据库名称(以__DB__代表).
+
+	5. 下载本系统全部代码,修改dataBaseConfig.include.php中dbName的值为__DB__.
+
+	6. 打包所有代码,注意解压后应该直接为各个文件,没有目录.
+
+	7. 在左侧的云环境-托管管理-版本管理中,创建新版本.勾选上传代码,上传代码包.
+
+	8. 点击 '上线' . <= [重要].
+
+	9. 访问 http://__DOMAIN__.duapp.com/install.php 如果输出 install successful ... 则安装成功.
+
+	10. 在版本管理中点击编辑.删除 install.php 文件 或 打开第四行的注释.(重复执行 install.php 会重置数据库)
+
+	11. 在云环境(BAE)-服务管理-Cron(定时任务)中创建任务. 
+			执行URL为 http://__DOMAIN__.duapp.com/getBars.cron.php
+			执行次数为 0
+			时间表为 * * * * *
+
+	12. 再创建一个定时任务.
+			执行URL为 http://__DOMAIN__.duapp.com/sign.cron.php
+			执行次数为 0
+			时间表为 * 1-23 * * *
+
+	13. 测试,登陆一个帐号.过几分钟,在MySQL-PMA中查看bars表,若有吧列表且exp不为0则一切正常.

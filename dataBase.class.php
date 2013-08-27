@@ -16,12 +16,6 @@ class DataBase {
 		// config
 		$config = require 'dataBaseConfig.include.php';
 		
-		// bae 数据库配置加载
-//		$config['host'] = getenv('HTTP_BAE_ENV_ADDR_SQL_IP');
-//		$config['port'] = getenv('HTTP_BAE_ENV_ADDR_SQL_PORT');
-//		$config['user'] = getenv('HTTP_BAE_ENV_AK');
-//		$config['password'] = getenv('HTTP_BAE_ENV_SK');
-
 		$this->mysqli = new mysqli($config['host'],$config['user'],$config['password'],$config['dbName'],$config['port']);
 
 		if ($this->mysqli->connect_error){

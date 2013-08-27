@@ -1,15 +1,12 @@
 <?php
 
+//exit(0);
+
 //if (!file_exists('install')) die('没有 install 文件,无法安装,请在根目录下创建空 install 文件.');
 
 //if (!unlink('install')) die('install 文件删除失败');
 
 $config = require 'dataBaseConfig.include.php';
-
-$config['host'] = getenv('HTTP_BAE_ENV_ADDR_SQL_IP');
-$config['port'] = getenv('HTTP_BAE_ENV_ADDR_SQL_PORT');
-$config['user'] = getenv('HTTP_BAE_ENV_AK');
-$config['password'] = getenv('HTTP_BAE_ENV_SK');
 
 $con = mysql_connect($config['host'] . ':' . $config['port'],$config['user'],$config['password']) or die('db connect error');
 
@@ -40,6 +37,8 @@ mysql_query('create table bars(id int primary key auto_increment,
 								char set utf8 engine innodb',$con) or die('create table bars error');
 
 mysql_close($con);
+
+echo 'install successful, please remove this file.';
 
 
 ?>

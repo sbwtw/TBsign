@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<title>注册</title>
+	<title>登陆</title>
 	<meta charset='utf-8'>
 </head>
 <body>
@@ -9,10 +9,20 @@
 		<div><span>百度帐号:</span><input id='username' type='text'/></div>
 		<div><span>帐号密码:</span><input id='password' type='password'/></div>
 		<div id='verify' style='display:none;'><span>验证码:</span><input type='text' id='verifycode'/><img id='verifyImg'/></div>
-		<div><input id='submit' type='button' value='注册' onclick='submit();'/></div>
+		<div><input id='submit' type='button' value='登陆' onclick='submit();'/></div>
 	</div>
 	<hr>
-	<a href='/manage.php' title='帐号管理'>帐号管理</a>
+	<a href='/manage.php' title='帐号管理' target='_blank'>查看签到帐号日志</a>
+  <div>
+  	<br>说明：
+  	<ul>
+  		<li>账号、密码填写百度账号密码，服务器以md5盐化加密保存密码。</li>
+  		<li>账号日志页面登陆也是用这个账号密码。</li>
+  		<li>本系统开源，代码地址：<a href='https://github.com/sbwtw/TBsign' target='_blank' title='github'>百度贴吧签到系统</a></li>
+  		<?php //<!--请保留链接--> ?>
+  		<li>作者博客：<a href='http://blog.sbw.so' title='石博文博客' target='_blank'>石博文博客</a></li>
+  	</ul>
+  </div>
 </body>
 
 <script language='javascript'>
