@@ -24,7 +24,7 @@ class SignCron extends Cron{
 	function updateDb($id,$exp){
 		$this->mysqli->clear();
 		$this->mysqli->table('bars');
-		$this->mysqli->set('exp = ' . $exp > 0 ? $exp : ' exp + ' . $exp);
+		$this->mysqli->set('exp = ' . ($exp > 0 ? $exp : ' exp + ' . $exp));
 		$this->mysqli->where('id = ' . $id);
 		$this->mysqli->update();
 	}
