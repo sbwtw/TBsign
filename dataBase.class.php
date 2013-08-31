@@ -142,7 +142,12 @@ class DataBase {
 	}
 
 	function update(){
-		$sql = 'update ' . $this->table . ' set ' . $this->set . ' where ' .$this->where;
+		$sql = 'update ' . $this->table . ' set ' . $this->set . ' where ' . $this->where;
+		return $this->execute($sql);
+	}
+
+	function delete(){
+		$sql = 'delete from ' . $this->table . ' where ' . $this->where;
 		return $this->execute($sql);
 	}
 

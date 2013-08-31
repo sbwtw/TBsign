@@ -12,7 +12,7 @@
 		<div><input id='submit' type='button' value='登陆' onclick='submit();'/></div>
 	</div>
 	<hr>
-	<a href='/manage.php' title='帐号管理' target='_blank'>查看签到帐号日志</a>
+	<a href='/manage.php' title='帐号管理' target='_blank'>帐号管理</a>
   <div>
   	<br>说明：
   	<ul>
@@ -56,6 +56,7 @@
 //			document.write('你的cookie:<br/><hr/><textarea style="width:100%;">' + res.cookie + "</textarea>");
 			if (res.result == 1 && res.info == 'ok'){
 				alert('登陆成功!\n' + '管理密码: 为百度登陆密码');
+				document.location='/manage.php';
 //				document.write('你的管理密码: <input type="text" value=' + res.password + '>');
 			} else {
 				alert('登陆失败! \n原因:' + res.info + '\n错误码:' + res.result);
