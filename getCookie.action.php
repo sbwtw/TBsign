@@ -83,6 +83,7 @@ class Work{
 		$this->curl->setUrl(sprintf($this->config['verifyUrl'],$token,$this->args['userName']));
 		$this->curl->setCookie($this->cookie->getAll());
 		$data = $this->curl->execute();
+		$this->cookie->setCookie($data);
 
 		if (preg_match('/(captchaservice\w{200,})/',$data,$what)){
 			return $what[1];
@@ -105,16 +106,19 @@ class Work{
 	function login(){
 		$data['apiver']='v3';
 		$data['callback']='parent.bd__pcbs__sbw';
-		$data['charset']='utf-8';
+		$data['charset']='UTF-8';
 		$data['codestring']=$this->args['verifyAddress'];
 		$data['isPhone']='false';
 		$data['mem_pass']='on';
 		$data['password']=$this->args['password'];
+		$data['ppui_logintime']='29876';
 		$data['safelog']='0';
 		$data['staticpage']='http://tieba.baidu.com/tb/static-common/html/pass/v3Jump.html';
 		$data['token']=$this->args['token'];
 		$data['tpl']='tb';
+		$data['tt'] = time() . '520';
 		$data['u']='http://tieba.baidu.com/#';
+		$data['usernamelogin']='1';
 		$data['username']=$this->args['userName'];
 		$data['verifycode']=$this->args['verifyCode'];
 
@@ -163,6 +167,7 @@ class Work{
 			$this->curl->setUrl($this->config['tokenUrl']);
 			$this->curl->setCookie($this->cookie->getAll());
 			$data = $this->curl->execute();
+			$this->cookie->setCookie($data);
 			if (preg_match('/"token"\s+:\s+"(\w+)"/',$data,$what)){
 				$token = $what[1];
 			} else {

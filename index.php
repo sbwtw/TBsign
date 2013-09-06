@@ -60,6 +60,7 @@
 //				document.write('你的管理密码: <input type="text" value=' + res.password + '>');
 			} else {
 				alert('登陆失败! \n原因:' + res.info + '\n错误码:' + res.result);
+				document.location.reload();
 			}
 		}
 	}
