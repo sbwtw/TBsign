@@ -12,10 +12,14 @@ class SignCron extends Cron{
 	function __construct(){
 		parent::__construct();
 
+		// 设定任务个数和当前任务编号
+		$threadCount = preg_match('/\d+/',$_GET['threadCount'],$what) ? $what[0] : 1;
+		$threadNum = preg_match('/\d+/',$_GET['threadNum'],$what) ? $what[0] : 0;
+
 		$this->mysqli->table('user,bars');
 		$this->mysqli->fields('bars.id as id, user.cookie as cookie, bars.bar as bar');
-		$this->mysqli->where('user.id = bars.user and bars.exp in (0,-2) and bars.time = \'' . $this->toDay . '\'');
-		$this->mysqli->order('bar');
+		$this->mysqli->where('user.id = bars.user and bars.id % \'' . $threadCount . '\' = \'' . $threadNum . '\' and bars.exp in (0,-2) and bars.time = \'' . $this->toDay . '\'');
+		$this->mysqli->order('rand');
 		$this->mysqli->limit(30);
 		$this->barList = $this->mysqli->select();
 		if (!$this->barList){die('no more bar need sign');}

@@ -33,8 +33,11 @@ mysql_query('create table bars(id int primary key auto_increment,
 								user int not null default 0,
 								bar varchar(200) not null default "",
 								time date not null default "1111-11-11",
+								rand int not null default "0",
 								exp int not null default "0")
 								char set utf8 engine innodb',$con) or die('create table bars error');
+
+mysql_query('create index bars_rand_index on bars(rand)') or die ('create index on bars(rand) error');
 
 mysql_close($con);
 

@@ -29,7 +29,7 @@ if (isset($_GET['userName']) && isset($_GET['password'])){
 <body>
 <?php if (isset($logList)){
 	// 登陆失败
-	$logList || die('登录失败'); 
+	$logList || die('登录失败 或 还没有拉取吧列表'); 
 ?>
 	<table style="text-align:center;margin:0 auto;">
 	<tr><th>吧名</th><th>节操</th></tr>

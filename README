@@ -32,6 +32,9 @@
  - cron.class.php / CURL.class.php / dataBase.class.php / getCookie.action.php / getCookieConfig.include.php
  	分别为cron基类,CURL类,db类,获取cookie动作,获取cookie动作的配置文件.
 
+ - deleteAccount.php
+ 	删除帐号的动作
+
 
 
 搭建流程之超级无级详细版(for BAE): 注: 所有没有提到的选项表示按默认选择或者随便选择.
@@ -67,3 +70,8 @@
 			时间表为 * 1-23 * * *
 
 	13. 测试,登陆一个帐号.过几分钟,在MySQL-PMA中查看bars表,若有吧列表且exp不为0则一切正常.
+
+
+注意：
+	旧版本中，当bars表数量较多时（接近6w条记录），需要手动清理，新版本中，bars接近50w条数据时同样要清理。
+		*这个问题会在查看签到历史日志功能完善后解决。

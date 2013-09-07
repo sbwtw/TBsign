@@ -42,6 +42,7 @@ class GetBarsCron extends Cron{
 				$bar['user'] = $this->user['id'];
 				$bar['bar'] = $val;
 				$bar['time'] = $this->toDay;
+				$bar['rand'] = rand();
 				$bars[] = $bar;
 			}
 
