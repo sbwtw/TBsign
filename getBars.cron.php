@@ -14,10 +14,13 @@ class GetBarsCron extends Cron{
 
 	function __construct(){
 		parent::__construct();
+
+		$threadCount = preg_match('/\d+/',$_GET['threadCount'],$what) ? $what[0] : 1;
+		$threadNum = preg_match('/\d+/',$_GET['threadNum'],$what) ? $what[0] : 0;
 		
 		$this->mysqli->table('user');
 		$this->mysqli->fields('id,name,cookie');
-		$this->mysqli->where('last < \'' . $this->toDay . '\'');
+		$this->mysqli->where('id % ' . $threadCount . ' = ' . $threadNum . ' and last < \'' . $this->toDay . '\'');
 		$this->mysqli->limit(1);
 		$this->user = $this->mysqli->select();
 		$this->user = $this->user[0];
