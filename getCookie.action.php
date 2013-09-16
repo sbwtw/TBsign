@@ -77,20 +77,21 @@ class Work{
 		$this->curl = new CURL();
 	}
 
-	// 检查是否需要验证码
-	function needVerify($token){
-
-		$this->curl->setUrl(sprintf($this->config['verifyUrl'],$token,$this->args['userName']));
-		$this->curl->setCookie($this->cookie->getAll());
-		$data = $this->curl->execute();
-		$this->cookie->setCookie($data);
-
-		if (preg_match('/(captchaservice\w{200,})/',$data,$what)){
-			return $what[1];
-		} else {
-			return false;
-		}
-	}
+//	// 2013-09-17 百度修改登录机制
+//	// 检查是否需要验证码
+//	function needVerify($token){
+//
+//		$this->curl->setUrl(sprintf($this->config['verifyUrl'],$token,$this->args['userName']));
+//		$this->curl->setCookie($this->cookie->getAll());
+//		$data = $this->curl->execute();
+//		$this->cookie->setCookie($data);
+//
+//		if (preg_match('/(captchaservice\w{200,})/',$data,$what)){
+//			return $what[1];
+//		} else {
+//			return false;
+//		}
+//	}
 
 	// 保存到数据库
 	function save(){
@@ -109,16 +110,19 @@ class Work{
 		$data['charset']='UTF-8';
 		$data['codestring']=$this->args['verifyAddress'];
 		$data['isPhone']='false';
+		$data['logintype'] = 'bascilogin';
 		$data['mem_pass']='on';
 		$data['password']=$this->args['password'];
-		$data['ppui_logintime']='29876';
-		$data['safelog']='0';
+		$data['ppui_logintime']='8888';
+		$data['quick_user'] = '0';
+		$data['safeflg']='0';
+		$data['splogin'] = 'rate';
 		$data['staticpage']='http://tieba.baidu.com/tb/static-common/html/pass/v3Jump.html';
 		$data['token']=$this->args['token'];
 		$data['tpl']='tb';
 		$data['tt'] = time() . '520';
-		$data['u']='http://tieba.baidu.com/#';
-		$data['usernamelogin']='1';
+		$data['u']='http://tieba.baidu.com/';
+//		$data['usernamelogin']='1';
 		$data['username']=$this->args['userName'];
 		$data['verifycode']=$this->args['verifyCode'];
 
@@ -129,7 +133,15 @@ class Work{
 		$res = $this->curl->execute();
 
 		if (preg_match('/err_no=(\d+)/',$res,$what)){
+			// 2013-09-17 百度更新验证码机制,验证码判断放在此处
 			if ($what[1]){
+				if (preg_match('/(captchaservice\w{200,})/',$res,$what)){
+					// 需要验证码
+					$this->returns['cookie'] = $this->cookie->getAll();
+					$this->returns['verifyAddress'] = $what[1];
+					$this->returns['token'] = $this->args['token'];
+				}
+				
 				$this->error('验证错误',$what[1]);
 			} else {
 				// 登陆成功,获得最终cookie
@@ -160,33 +172,33 @@ class Work{
 		if (!isset($this->args['step']) || $this->args['step'] == 1){
 			// 第一步
 			// 第一次,获得BAIDUID
-			$this->curl->setUrl($this->config['tokenUrl']);
+			$this->curl->setUrl(sprintf($this->config['tokenUrl'], time() . '520'));
 			$data = $this->curl->execute();
 			$this->cookie->setCookie($data);
 			// 第二次,获得token
-			$this->curl->setUrl($this->config['tokenUrl']);
+			$this->curl->setUrl(sprintf($this->config['tokenUrl'], time() . '520'));
 			$this->curl->setCookie($this->cookie->getAll());
 			$data = $this->curl->execute();
 			$this->cookie->setCookie($data);
-			if (preg_match('/"token"\s+:\s+"(\w+)"/',$data,$what)){
+			if (preg_match('/"token" : "(\w+)"/',$data,$what)){
 				$token = $what[1];
 			} else {
 				$this->error('get token error');
 			}
 
-			$verify = $this->needVerify($token);
-			if ($verify){
-				// 需要验证码
-				$this->returns['cookie'] = $this->cookie->getAll();
-				$this->returns['verifyAddress'] = $verify;
-				$this->returns['token'] = $token;
-
-				$this->success('next');
-			} else {
+			// 2013-09-17 应对百度修改登录机制,这里不再检查验证码,直接登录
+//			if (preg_match('/(captchaservice\w{200,})/',$data,$what)){
+//				// 需要验证码
+//				$this->returns['cookie'] = $this->cookie->getAll();
+//				$this->returns['verifyAddress'] = $what[1];
+//				$this->returns['token'] = $token;
+//
+//				$this->success('next');
+//			} else {
 				// 直接登陆,要传递一个token
 				$this->args['token'] = $token;
 				$this->login();
-			}
+//			}
 		} else {
 			// 第二步,直接登陆
 			$this->cookie->setCookie2($_POST['cookie']);

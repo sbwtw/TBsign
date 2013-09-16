@@ -11,10 +11,10 @@ if (isset($_POST['userName']) && isset($_POST['password'])){
 
 	if (isset($result[0]) && $result[0]['name'] == $_POST['userName']){
 		$mysqli->where('name = \'' . $_POST['userName'] . '\'');
-		$mysqli->delete() && die('删除成功');
+		$mysqli->delete() && die('delete successful!');
 	}
 }
 
-die('错误');
+die('delete error!');
 
 ?>

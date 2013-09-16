@@ -9,7 +9,10 @@
 		<div><span>百度帐号:</span><input id='username' type='text'/></div>
 		<div><span>帐号密码:</span><input id='password' type='password'/></div>
 		<div id='verify' style='display:none;'><span>验证码:</span><input type='text' id='verifycode'/><img id='verifyImg'/></div>
-		<div><input id='submit' type='button' value='登陆' onclick='submit();'/></div>
+		<div>
+			<input id='submit' type='button' value='登陆' onclick='submit();'/>
+			<input type='checkbox'>	
+		</div>
 	</div>
 	<hr>
 	<a href='/manage.php' title='帐号管理' target='_blank'>帐号管理</a>
