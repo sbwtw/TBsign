@@ -27,7 +27,7 @@ if (isset($_GET['userName']) && isset($_GET['password'])){
 	<meta charset='utf-8'>
 </head>
 <body>
-<?php if ($logList === false){ ?>
+<?php if ($logList || $logList === false){ ?>
 	<table style="text-align:center;margin:0 auto;">
 	<tr><th>吧名</th><th>节操</th></tr>
 	<?php foreach ($logList as $i){
